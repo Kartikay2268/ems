@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Attendance;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -26,7 +27,16 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        $schedule->call(function () {
+            $attendance =  new Attendance();
+            $attendance->punchIn = null;
+            $attendance->punchOut = null;
+            $attendance->save();
+        })->cron('0 0 * * *');
     }
+
+
+
 
     /**
      * Register the Closure based commands for the application.
