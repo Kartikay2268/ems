@@ -96,7 +96,7 @@
                                 </tbody>
                             </table>
                             <div style="margin-right: 10px; float: right">
-                                {{$users->links()}}
+                                {{ $users->appends(Request::except('page'))->links() }}
                             </div>
                         </div>
                     </div>
