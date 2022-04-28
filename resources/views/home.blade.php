@@ -12,9 +12,9 @@
 
                     @if(Auth::user()->role == 'manager')
                     <div class="row">
-                        <h4 style="text-align: center">Attendance Requests</h4>
+                        <h4 style="text-align: center"><b>Attendance Requests</b></h4>
                         <table class="table">
-                            @if(!$requestData->isEmpty()))
+                            @if(!$requestData->isEmpty())
                                 @foreach($requestData as $data)
                                     <tr id="emp-{{$data->empId}}">
                                         <td>

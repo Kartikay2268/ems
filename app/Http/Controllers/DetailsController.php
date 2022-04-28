@@ -12,11 +12,16 @@ class DetailsController extends Controller
 {
     public function index() {
 
-        $users = User::where('empId',Auth::user()->empId)->get();
-        $salary = Salary::where('empId', Auth::user()->empId)->first();
         try {
-            $team = Team::where('id', $users->first()->team_id)->first();
-            $managerName = User::where('empId', $team->manager)->first()->name;
+            $users = User::getUser(Auth::user()->empId);
+            $salary = Salary::getSalary(Auth::user()->empId);
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
+
+        try {
+            $team = Team::getTeam($users->first()->team_id);
+            $managerName = User::getName($team->manager);
         } catch (\Exception $e) {
             $team = null;
             $managerName = null;
@@ -31,6 +36,8 @@ class DetailsController extends Controller
                     break;
                 case "manager":
                     $user->role = "Manager";
+                default:
+                    $user->role = "Employee";
                     break;
             endswitch;
         }

@@ -21,66 +21,78 @@ class Attendance extends Model
      * @return void
      * @throws \Exception
      */
-    private function validate($data) {
-        if(empty($data)) {
+    private function validate($data)
+    {
+        if (empty($data)) {
             throw new \Exception("Invalid Parameters Passed");
         }
     }
 
     /**
-     * @param $data
+     * @param $attendanceInfo
      * @return Attendance|bool|Model
      * @throws \Exception
      */
 
-    public static function punchIn($data) {
-        (new self())->validate($data);
+    public static function punchIn($attendanceInfo)
+    {
+        (new self())->validate($attendanceInfo);
 
-        return self::updateOrCreate( [
-            'empId' => $data['empId']
-        ], $data);
+        return self::updateOrCreate([
+            'empId' => $attendanceInfo['empId']
+        ], $attendanceInfo);
 
 
     }
 
     /**
-     * @param $data
+     * @param $attendanceInfo
      * @return Model
      * @throws \Exception
      */
 
-    public static function punchOut($data) {
+    public static function punchOut($attendanceInfo)
+    {
 
-        (new self())->validate($data);
+        (new self())->validate($attendanceInfo);
 
-        return self::updateOrCreate( [
-            'empId' => $data['empId']
-        ], $data);
+        return self::updateOrCreate([
+            'empId' => $attendanceInfo['empId']
+        ], $attendanceInfo);
     }
 
-    public static function getPunchTime($empId) {
+    public static function getPunchTime($empId)
+    {
 
         return self::where('empId', $empId)->first();
 
     }
 
-    public static function getRequestData($managerId) {
-
-        return self::where('manager_id', $managerId)->where('request', 1)->get(['punchIn', 'punchOut', 'empId']);
+    public static function getRequestData($managerId)
+    {
+        return self::where([
+            ['manager_id','=',$managerId],
+            ['request', '=', 1]
+        ])->get(['punchIn', 'punchOut', 'empId']);
 
     }
 
-    public static function approveAttendance($empId) {
-        $attendance = self::find(self::where('empId', $empId)->first()->id);
+    public static function approveAttendance($empId)
+    {
+        $id = self::where('empId', $empId)->first()->id;
+        $attendance = self::find($id);
         $attendance->request = 0;
         $attendance->working_days = $attendance->working_days + 1;
         return $attendance->save();
     }
 
-    public static function denyAttendance($empId) {
-        $attendance = self::find(self::where('empId', $empId)->first()->id);
+    public static function denyAttendance($empId)
+    {
+        $id = self::where('empId', $empId)->first()->id;
+        $attendance = self::find($id);
         $attendance->request = 0;
         return $attendance->save();
     }
+
 
 }

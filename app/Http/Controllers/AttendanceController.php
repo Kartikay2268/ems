@@ -13,23 +13,30 @@ class AttendanceController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
-    public function index() {
-        date_default_timezone_set('Asia/Kolkata');
+    public function index()
+    {
 
         $punchIn = null;
         $punchOut = null;
-        $date = date('d/m/y');
+        $currentDate = date('d/m/y');
 
-        $attendance = Attendance::getPunchTime(Auth::user()->empId);
+        try {
+            $attendanceInfo = Attendance::getPunchTime(Auth::user()->empId);
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
 
-        if (!empty($attendance)) {
+        if (!empty($attendanceInfo)) {
 
-            if (!empty($attendance->punchIn && $date == substr($attendance->punchIn, 0, 8))) {
-                $punchIn = $attendance->punchIn;
+            $punchInDate = substr($attendanceInfo->punchIn, 0, 8);
+            $punchOutDate = substr($attendanceInfo->punchOut, 0, 8);
+
+            if (!empty($attendanceInfo->punchIn) && $currentDate == $punchInDate) {
+                $punchIn = $attendanceInfo->punchIn;
             }
 
-            if (!empty($attendance->punchOut && $date == substr($attendance->punchOut, 0, 8))) {
-                $punchOut = $attendance->punchOut;
+            if (!empty($attendanceInfo->punchOut) && $currentDate == $punchOutDate) {
+                $punchOut = $attendanceInfo->punchOut;
             }
         }
 
@@ -37,44 +44,51 @@ class AttendanceController extends Controller
     }
 
 
-    public function punchIn(){
-        date_default_timezone_set('Asia/Kolkata');
+    public function punchIn()
+    {
 
-        $manager = Team::where('id', Auth::user()->team_id)->first()->manager;
+        try {
+            $managerId = Team::getManagerId(Auth::user()->team_id);
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
 
-        $data = ['punchIn'=> date('d/m/y H:i:s'),
-                'empId' => Auth::user()->empId,
-                'time' => time(),
-                'manager_id' => $manager
+        $attendanceInfo = [
+            'punchIn' => date('d/m/y H:i:s'),
+            'empId' => Auth::user()->empId,
+            'time' => time(),
+            'manager_id' => $managerId
         ];
 
         try {
-            Attendance::punchIn($data);
-            return redirect(route('attendance'));
+            Attendance::punchIn($attendanceInfo);
 
         } catch (\Exception $e) {
             return $e->getMessage();
         }
+        return redirect(route('attendance'));
     }
 
-    public function punchOut() {
-        date_default_timezone_set('Asia/Kolkata');
+    public function punchOut()
+    {
 
-        $data = ['punchOut'=> date('d/m/y H:i:s'),
-                'empId' => Auth::user()->empId,
-                'request' => 1
+        $attendanceInfo = [
+            'punchOut' => date('d/m/y H:i:s'),
+            'empId' => Auth::user()->empId,
+            'request' => 1
         ];
 
         try {
-            Attendance::punchOut($data);
-            return redirect(route('attendance'));
+            Attendance::punchOut($attendanceInfo);
         } catch (\Exception $e) {
             return $e->getMessage();
         }
+        return redirect(route('attendance'));
 
     }
 
-    public function approveAttendance(Request $request) {
+    public function approveAttendance(Request $request)
+    {
         try {
             Attendance::approveAttendance($request->id);
         } catch (\Exception $exception) {
@@ -82,7 +96,8 @@ class AttendanceController extends Controller
         }
     }
 
-    public function denyAttendance(Request $request) {
+    public function denyAttendance(Request $request)
+    {
         try {
             Attendance::denyAttendance($request->id);
         } catch (\Exception $exception) {

@@ -13,38 +13,42 @@ class Salary extends Model
         'ctc'
     ];
 
-    private function validate($data) {
-        if(empty($data)) {
+    private function validate($data)
+    {
+        if (empty($data)) {
             throw new \Exception("Invalid Parameters Passed");
         }
     }
 
-    public static function addSalary($data) {
-        (new self())->validate($data);
+    public static function addSalary($salaryInfo)
+    {
+        (new self())->validate($salaryInfo);
 
-        return self::create($data);
+        return self::create($salaryInfo);
     }
 
-    public static function editSalary($data, $id) {
-        (new self())->validate($data);
+    public static function editSalary($salaryInfo, $id)
+    {
+        (new self())->validate($salaryInfo);
 
         $salary = self::find($id);
 
-        if($data['fixed'] != $salary->fixed) {
-            $salary->fixed = $data['fixed'];
+        if ($salaryInfo['fixed'] != $salary->fixed) {
+            $salary->fixed = $salaryInfo['fixed'];
         }
-        if($data['variable'] != $salary->variable) {
-            $salary->variable = $data['variable'];
+        if ($salaryInfo['variable'] != $salary->variable) {
+            $salary->variable = $salaryInfo['variable'];
         }
-        if($data['ctc'] != $salary->ctc) {
-            $salary->ctc = $data['ctc'];
+        if ($salaryInfo['ctc'] != $salary->ctc) {
+            $salary->ctc = $salaryInfo['ctc'];
         }
 
         return $salary->save();
 
     }
 
-    public static function getSalary($empId) {
+    public static function getSalary($empId)
+    {
         return self::where('empId', $empId)->first();
     }
 }

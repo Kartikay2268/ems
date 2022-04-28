@@ -21,23 +21,32 @@ class HomeController extends Controller
 
     public function index()
     {
-        if(Auth::guest()){
+        if (Auth::guest()) {
             return view('login');
         }
 
         $requestData = null;
 
-        if(Auth::user()->role == 'manager') {
+        if (Auth::user()->role == 'manager') {
 
-            $requestData  = Attendance::getRequestData(Auth::user()->empId);
-            if($requestData->isEmpty()) {
+            try {
+                $requestData = Attendance::getRequestData(Auth::user()->empId);
+            } catch (\Exception $exception) {
+                return $exception->getMessage();
+            }
+
+            if (!$requestData->isEmpty()) {
                 foreach ($requestData as $data) {
-                    $data->name =  User::getName($data->empId);
+
+                    try {
+                        $data->name = User::getName($data->empId);
+                    } catch (\Exception $exception) {
+                        return $exception->getMessage();
+                    }
                 }
             }
         }
         return view('home', ['requestData' => $requestData]);
-
 
 
     }

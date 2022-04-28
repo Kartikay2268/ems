@@ -9,21 +9,21 @@ use Illuminate\Support\Facades\Auth;
 
 class ManagerTeamController extends Controller
 {
-    public function index(){
+    public function index()
+    {
+        $team = Team::getManagerTeam(Auth::user()->empId);
+        $teamName = $team->name;
+        $teamId = $team->id;
 
+        $members = User::getTeamMembers($teamId);
 
-         $team = Team::getManagerTeam(Auth::user()->empId);
-         $teamName = $team->name;
-         $teamId = $team->id;
-
-         $members = User::getTeamMembers($teamId);
-
-         return view('manager.team', compact('members'))
-                    ->with(['teamName' => $teamName]);
+        return view('manager.team', compact('members'))
+            ->with(['teamName' => $teamName]);
     }
 
-    public function viewMember(Request $request) {
+    public function viewMember(Request $request)
+    {
         $users = User::getUser($request->id);
-        return view('details', ['users'=> $users]);
+        return view('details', ['users' => $users]);
     }
 }

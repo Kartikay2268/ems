@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Attendance;
+use App\Console\Commands\ClearPunches;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -15,6 +16,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
+        ClearPunches::class
     ];
 
     /**
@@ -27,15 +29,9 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
-        $schedule->call(function () {
-            $attendance =  new Attendance();
-            $attendance->punchIn = null;
-            $attendance->punchOut = null;
-            $attendance->save();
-        })->cron('0 0 * * *');
+        $schedule->command('clear:punches')
+            ->cron('0 0 * * *');
     }
-
-
 
 
     /**
@@ -45,6 +41,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
+        //$this->load(__DIR__.'/Commands');
         require base_path('routes/console.php');
     }
 }

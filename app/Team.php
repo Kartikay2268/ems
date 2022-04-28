@@ -11,51 +11,64 @@ class Team extends Model
         'manager'
     ];
 
-    private function validate($data) {
-        if(empty($data)) {
+    private function validate($data)
+    {
+        if (empty($data)) {
             throw new \Exception("Invalid Parameters Passed");
         }
     }
 
-    public static function getTeam($id) {
+    public static function getTeam($id)
+    {
         return self::where('id', $id)->get()->first();
     }
 
-    public static function getTeams() {
+    public static function getTeams()
+    {
         return self::paginate(5);
     }
 
-    public static function getManagerTeam($managerId) {
+    public static function getManagerTeam($managerId)
+    {
         return self::where('manager', $managerId)->first();
     }
 
-    public static function addTeam($data) {
-        (new self())->validate($data);
-        return self::create($data);
+    public static function addTeam($teamInfo)
+    {
+        (new self())->validate($teamInfo);
+        return self::create($teamInfo);
     }
 
-    public static function getTeamName($teamId) {
-        return self::where('id',$teamId)->get()->first()->name;
+    public static function getTeamName($teamId)
+    {
+        return self::where('id', $teamId)->get()->first()->name;
     }
 
-    public static function deleteTeam($id) {
+    public static function deleteTeam($id)
+    {
         $team = self::find($id);
         return $team->delete();
     }
 
-    public static function editTeam($data) {
-        (new self())->validate($data);
+    public static function editTeam($teamInfo)
+    {
+        (new self())->validate($teamInfo);
 
-        $team = Team::find($data['id']);
-        if($team->name != $data['name']){
-                $team->name = $data['name'];
-            }
-        if($team->manager != $data['manager']) {
-                $team->manager = $data['manager'];
-            }
+        $team = Team::find($teamInfo['id']);
+        if ($team->name != $teamInfo['name']) {
+            $team->name = $teamInfo['name'];
+        }
+        if ($team->manager != $teamInfo['manager']) {
+            $team->manager = $teamInfo['manager'];
+        }
 
         return $team->save();
 
+    }
+
+    public static function getManagerId($teamId)
+    {
+        return self::where('id', $teamId)->first()->manager;
     }
 
 }
