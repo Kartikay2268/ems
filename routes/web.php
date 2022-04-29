@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,8 +26,8 @@ Route::get('/employees', 'EmployeesController@index')->name('employees');
 Route::get('/employee/add', 'EmployeesController@addEmployee')->name('employee.add');
 Route::post('/employee/submit', 'EmployeesController@submitEmployee')->name('employee.submit');
 Route::get('/employee/edit/{id}', 'EmployeesController@editEmployee')->name('employee.edit');
-Route::post('/employee/update', 'EmployeesController@updateEmployee')->name('employee.update');
-Route::get('/employee/delete/{id}', 'EmployeesController@deleteEmployee')->name('employee.delete');
+Route::put('/employee/update', 'EmployeesController@updateEmployee')->name('employee.update');
+Route::delete('/employee/delete/{id}', 'EmployeesController@deleteEmployee')->name('employee.delete');
 Route::get('/employee/filter', 'EmployeesController@filterEmployee')->name('employee.filter');
 Route::get('/admin/salary/{id}', 'EmployeesController@salaryDetails')->name('salaryDetails');
 Route::post('/salary/update', 'EmployeesController@salaryUpdate')->name('salaryUpdate');
@@ -37,10 +39,10 @@ Route::post('/teams/add/submit','TeamController@submitTeam')->name('teams.submit
 Route::get('/teams/manage/{id}','TeamController@manageTeam')->name('teams.manage');
 Route::get('/teams/manage/{id}/addmember','TeamController@addMember')->name('teams.addMember');
 Route::post('/teams/manage/add', 'TeamController@addMemberSubmit')->name('teams.addMemberSubmit');
-Route::get('/teams/manage/{id}/delete/{member_id}', 'TeamController@deleteMember')->name('teams.deleteMember');
-Route::get('/teams/manage/delete/{team_id}', 'TeamController@deleteTeam')->name('teams.deleteTeam');
+Route::delete('/teams/manage/{id}/delete/{member_id}', 'TeamController@deleteMember')->name('teams.deleteMember');
+Route::delete('/teams/manage/delete/{team_id}', 'TeamController@deleteTeam')->name('teams.deleteTeam');
 Route::get('/teams/manage/edit/{id}', 'TeamController@editTeam')->name('teams.editTeam');
-Route::post('/teams/manage/edit/submit', 'TeamController@editTeamSubmit')->name('teams.editTeamSubmit');
+Route::put('/teams/manage/edit/submit', 'TeamController@editTeamSubmit')->name('teams.editTeamSubmit');
 
 //ManagerTeamController Routes
 Route::get('/manager/team', 'ManagerTeamController@index')->name('managerTeam');

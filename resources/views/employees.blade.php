@@ -69,9 +69,16 @@
 
                                                 </li>
                                                 <li>
-                                                    <a href="{{ route('employee.delete',$user->empId) }}">
+                                                    <form method="post" action="{{ route('employee.delete',$user->empId) }}">
+                                                        {{method_field('DELETE')}}
+                                                        {{csrf_field()}}
+                                                        <button type="submit"
+                                                                style="border: none; background: #ffffff; color: #ff3025;
+                                                                align-content: center; width: 85px;"><b>Delete</b></button>
+                                                    </form>
+                                                    <!--<a href="{{ route('employee.delete',$user->empId) }}">
                                                         Delete
-                                                    </a>
+                                                    </a>-->
 
                                                 </li>
                                             </ul>

@@ -38,9 +38,16 @@
 
                                             <ul class="dropdown-menu" role="menu">
                                                 <li>
-                                                    <a href="{{route('teams.deleteMember', [$team_id, $member->empId])}}">
+                                                    <form method="post" action="{{ route('teams.deleteMember', [$team_id, $member->empId]) }}">
+                                                        {{method_field('DELETE')}}
+                                                        {{csrf_field()}}
+                                                        <button type="submit"
+                                                                style="border: none; background: #ffffff; color: #ff3025;
+                                                                align-content: center; width: 85px;"><b>Delete</b></button>
+                                                    </form>
+                                                    <!--<a href="{{route('teams.deleteMember', [$team_id, $member->empId])}}">
                                                         Delete
-                                                    </a>
+                                                    </a>-->
 
                                                 </li>
                                             </ul>

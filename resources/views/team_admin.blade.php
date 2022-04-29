@@ -38,9 +38,14 @@
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a href="{{route('teams.deleteTeam', $team->id)}}">
-                                                        Delete
-                                                    </a>
+
+                                                    <form method="post" action="{{route('teams.deleteTeam', $team->id)}}">
+                                                        {{method_field('DELETE')}}
+                                                        {{csrf_field()}}
+                                                        <button type="submit"
+                                                                style="border: none; background: #ffffff; color: #ff3025;
+                                                                align-content: center; width: 85px;"><b>Delete</b></button>
+                                                    </form>
                                                 </li>
                                             </ul>
                                         </td>

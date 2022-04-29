@@ -11,6 +11,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <form method="post" action="{{route('teams.editTeamSubmit')}}">
+                                {{method_field('PUT')}}
                                 {{csrf_field()}}
                                 <input value="{{$team->id}}" name="team_id" hidden>
                                 <table class="table">

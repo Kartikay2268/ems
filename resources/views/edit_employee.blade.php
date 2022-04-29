@@ -12,6 +12,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <form method="post" action="{{route('employee.update')}}">
+                                {{method_field('PUT')}}
                                 {{csrf_field()}}
                                 <table class="table">
                                     <tr class="row">
@@ -104,7 +105,7 @@
                                     </tr>
                                     <tr class="row">
                                         <th><label for="empId">Id</label></th>
-                                        <td><input id="empId" name="empId" type="text" placeholder="Employee Id" value="{{htmlspecialchars($user->empId)}}"></td>
+                                        <td><input id="empId" name="empId" type="text" placeholder="Employee Id" value="{{htmlspecialchars($user->empId)}}" readonly></td>
                                     </tr>
                                     <tr class="row">
                                         <th><label for="role">Role</label></th>
