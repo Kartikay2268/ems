@@ -94,5 +94,10 @@ class Attendance extends Model
         return $attendance->save();
     }
 
+    public static function clearPunchTimes() {
+        $attendance = Attendance::query();
+        $attendance->update(['punchIn' => null, 'punchout' => null]);
+    }
+
 
 }

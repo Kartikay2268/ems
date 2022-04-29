@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+
         ClearPunches::class
     ];
 
@@ -27,13 +27,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+
         $schedule->command('clear:punches')
-            ->cron('0 0 * * *');
+            ->daily();
     }
-
-
     /**
      * Register the Closure based commands for the application.
      *
@@ -41,7 +38,6 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        //$this->load(__DIR__.'/Commands');
         require base_path('routes/console.php');
     }
 }

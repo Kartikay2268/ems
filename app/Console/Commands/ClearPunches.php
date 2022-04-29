@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Attendance;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class ClearPunches extends Command
 {
@@ -19,7 +20,7 @@ class ClearPunches extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Set the punch in/out times to null';
 
     /**
      * Create a new command instance.
@@ -38,12 +39,11 @@ class ClearPunches extends Command
      */
     public function handle()
     {
-        \Log::info("Cron is working fine!");
-
-        $attendance =  new Attendance();
-        $attendance->punchIn = null;
-        $attendance->punchOut = null;
-        $attendance->save();
+        try {
+            Attendance::clearPunchTimes();
+        } catch (\Exception $exception) {
+            \Log::info($exception->getMessage());
+        }
 
     }
 }
