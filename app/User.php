@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Request;
 
 class User extends Authenticatable
 {
@@ -85,8 +86,8 @@ class User extends Authenticatable
         if ($employeeInfo['address'] != $oldUser->address) {
             $user->address = $employeeInfo['address'];
         }
-        if ($employeeInfo['name'] != $oldUser->bloodGroup) {
-            $user->bloodGroup = $employeeInfo['name'];
+        if ($employeeInfo['bloodGroup'] != $oldUser->bloodGroup) {
+            $user->bloodGroup = $employeeInfo['bloodGroup'];
         }
         if ($employeeInfo['dob'] != $oldUser->dob) {
             $user->dob = $employeeInfo['dob'];
@@ -164,6 +165,51 @@ class User extends Authenticatable
             ['experience','=', $exp],
             ['role','=', $role]
         ])->paginate(10);
+    }
+
+    public static function filterApi(\Illuminate\Http\Request $request) {
+        $query = User::query();
+
+        if ($name = $request->input('name')) {
+            $query->whereRaw("name LIKE '%" . $name . "%'");
+        }
+
+        if($empId = $request->input('empid')) {
+            $query->whereRaw("empId LIKE '%" . $empId . "%'");
+        }
+
+        if($doj = $request->input('doj')) {
+            $query->whereRaw("doj LIKE '%" . $doj . "%'");
+        }
+
+        if($exp = $request->input('exp')) {
+            $query->whereRaw("experience LIKE '%" . $exp . "%'");
+        }
+
+        if($designation = $request->input('designation')) {
+            $query->whereRaw("designation LIKE '%" . $designation . "%'");
+        }
+
+        if(($lowerRange = $request->input('lowerRange')) && ($upperRange = $request->input('upperRange'))) {
+
+            $query->select('users.*')
+                ->leftJoin('salaries', 'users.empId', '=', 'salaries.empId')
+                ->whereBetween('fixed', [$lowerRange, $upperRange]);
+        }
+
+        $limit = 20;
+        $page = $request->input('page', 1);
+        $total = $query->count();
+
+        $query->orderBy('id');
+        $result = $query->offset($limit * ($page - 1))->limit($limit)->get();
+
+        return [
+            'total' => $total,
+            'page' => $page,
+            'last_page' => ceil($total / $limit),
+            'data' => $result
+        ];
     }
 
 

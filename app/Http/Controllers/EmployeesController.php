@@ -224,7 +224,11 @@ class EmployeesController extends Controller
     public function editEmployee(Request $request, $empId)
     {
 
-        $user = User::getUser($empId)->first();
+        try {
+            $user = User::getUser($empId)->first();
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
 
         return view('edit_employee', ['user' => $user]);
     }
@@ -254,11 +258,12 @@ class EmployeesController extends Controller
 
         try {
             User::editEmployee($employeeInfo, $request->empId);
-            return redirect('/employees');
 
         } catch (\Exception $e) {
             return $e->getMessage();
         }
+
+        return redirect('/employees');
 
     }
 
@@ -289,8 +294,12 @@ class EmployeesController extends Controller
 
     public function salaryDetails(Request $request)
     {
-        $user = User::getUser($request->id)->first();
-        $salary = Salary::getSalary($request->id);
+        try {
+            $user = User::getUser($request->id)->first();
+            $salary = Salary::getSalary($request->id);
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
 
         return view('salary', ['user' => $user, 'salary' => $salary]);
     }
@@ -298,9 +307,8 @@ class EmployeesController extends Controller
     /**
      * Update the salary information of the employee in DB
      * @param SalaryUpdate $request
-     * @return \Illuminate\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|void
+     * @return \Illuminate\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|string|void
      */
-
     public function salaryUpdate(SalaryUpdate $request)
     {
 
@@ -311,7 +319,11 @@ class EmployeesController extends Controller
             'ctc' => $request->ctc
         ];
 
-        $salary = Salary::getSalary($request->empId);
+        try {
+            $salary = Salary::getSalary($request->empId);
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
 
         if (!isset($salary)) {
 
@@ -319,7 +331,6 @@ class EmployeesController extends Controller
                 Salary::addSalary($salaryInfo);
 
             } catch (\Exception $e) {
-
                 return redirect(route('salaryDetails', $request->empId));
             }
 
@@ -343,23 +354,11 @@ class EmployeesController extends Controller
 
     }
 
-    public function getEmployees(Request $request)
-    {
+    public function getEmployees(Request $request) {
 
-        $query = User::query();
+        $response = User::filterApi($request);
 
-        $perpage = 20;
-        $page = $request->input('page', 1);
-        $total = $query->count();
-
-        $result = $query->offset(($page - 1) * $perpage)->limit($perpage)->get();
-
-        return [
-            'data' => $result,
-            'total' => $total,
-            'page' => $page,
-            'last_page' => ceil($total / $perpage)
-        ];
+        return response()->json($response);
 
     }
 
