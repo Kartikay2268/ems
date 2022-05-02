@@ -183,7 +183,7 @@ class User extends Authenticatable
         }
 
         if($exp = $request->input('exp')) {
-            $query->whereRaw("experience LIKE '%" . $exp . "%'");
+            $query->where('experience', $exp);
         }
 
         if($designation = $request->input('designation')) {
