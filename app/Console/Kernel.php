@@ -2,7 +2,6 @@
 
 namespace App\Console;
 
-use App\Attendance;
 use App\Console\Commands\ClearPunches;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;

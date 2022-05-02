@@ -2,9 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Attendance;
+use App\Http\Models\Attendance;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 
 class ClearPunches extends Command
 {
@@ -21,16 +20,6 @@ class ClearPunches extends Command
      * @var string
      */
     protected $description = 'Set the punch in/out times to null';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Execute the console command.

@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Attendance;
-use Illuminate\Http\Request;
+use App\Http\Models\Attendance;
+use App\Http\Models\User;
 use Illuminate\Support\Facades\Auth;
-use App\User;
 
 class HomeController extends Controller
 {

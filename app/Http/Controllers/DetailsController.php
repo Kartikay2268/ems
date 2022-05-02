@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Salary;
-use App\Team;
-use Illuminate\Http\Request;
-use App\User;
+use App\Http\Models\Salary;
+use App\Http\Models\Team;
+use App\Http\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class DetailsController extends Controller

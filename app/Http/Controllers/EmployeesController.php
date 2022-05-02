@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Models\Salary;
+use App\Http\Models\User;
 use App\Http\Requests\EmployeeDetails;
 use App\Http\Requests\SalaryUpdate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\User;
-use App\Salary;
 
 class EmployeesController extends Controller
 {
@@ -356,7 +356,11 @@ class EmployeesController extends Controller
 
     public function getEmployees(Request $request) {
 
-        $response = User::filterApi($request);
+        try {
+            $response = User::filterApi($request);
+        } catch (\Exception $exception) {
+            return $exception->getMessage();
+        }
 
         return response()->json($response);
 

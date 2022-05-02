@@ -33,8 +33,8 @@ class EmployeeDetails extends FormRequest
             'phone' => 'required',
             'address' => 'required',
             'bloodGroup' => 'required',
-            'dob' => 'required',
-            'doj' => 'required'
+            'dob' => 'required|date|date_format:Y-m-d|before_or_equal:today',
+            'doj' => 'required|date|date_format:Y-m-d|before_or_equal:today'
         ];
     }
 }

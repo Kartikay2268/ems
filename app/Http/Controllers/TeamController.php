@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Models\Team;
+use App\Http\Models\User;
 use App\Http\Requests\TeamDetails;
 use Illuminate\Http\Request;
-use App\User;
-use App\Team;
 
 class TeamController extends Controller
 {
@@ -85,8 +85,7 @@ class TeamController extends Controller
         return view('add_member', ['name' => $name, 'employees' => $employees, 'team_id' => $request->id]);
     }
 
-    public function addMemberSubmit(Request $request)
-    {
+    public function addMemberSubmit(Request $request) {
 
         try {
             User::setTeam($request->member_id, $request->team_id);
@@ -119,6 +118,7 @@ class TeamController extends Controller
         } catch (\Exception $e) {
 
             return redirect(route('teams'));
+
         }
         return redirect(route('teams'));
     }

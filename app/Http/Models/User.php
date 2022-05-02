@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Http\Models;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Notifications\Notifiable;
+use function bcrypt;
 
 class User extends Authenticatable
 {
